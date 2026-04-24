@@ -35,12 +35,19 @@
         }
     </script>
     <style>
-        .kinetic-title {
-            letter-spacing: -0.06em;
-            transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67), color 0.5s ease;
+        /* Global optimization */
+        body {
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Advanced Iridescent Glass 4.0 */
+        .kinetic-title {
+            letter-spacing: -0.06em;
+            transition: transform 0.1s linear, opacity 0.1s linear;
+            will-change: transform, opacity;
+        }
+
+        /* Optimized Iridescent Glass 4.0 */
         .glass-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(245,248,255,0.45) 100%);
             backdrop-filter: blur(24px);
@@ -49,18 +56,18 @@
             box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.05);
             position: relative;
             overflow: hidden;
+            transform: translateZ(0);
             transition: border-color 0.8s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Special Sharp version for Expert Card to remove "blurry" feel */
         .expert-card-sharp {
             background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(250,252,255,0.85) 100%);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 1);
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.08);
+            will-change: transform;
         }
 
-        /* Iridescent Border Animation */
         .glass-card::after {
             content: '';
             position: absolute;
@@ -76,7 +83,6 @@
             pointer-events: none;
         }
 
-        /* Oil Slick Sheen Overlay */
         .glass-card::before {
             content: '';
             position: absolute;
@@ -85,6 +91,7 @@
             background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.06), rgba(168, 85, 247, 0.06), rgba(6, 182, 212, 0.06), transparent);
             animation: rotate-hologram 15s linear infinite;
             pointer-events: none;
+            will-change: transform;
         }
 
         @keyframes flow-border {
@@ -98,42 +105,10 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Expert Badge Shine */
-        @keyframes shine-badge {
-            0% { left: -100%; }
-            20% { left: 100%; }
-            100% { left: 100%; }
-        }
-
-        .expert-status-badge {
-            position: relative;
-            overflow: hidden;
-        }
-        .expert-status-badge::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shine-badge 3s infinite;
-        }
-
-        /* Shifting gradient for the insight line */
-        @keyframes gradient-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .animate-gradient-flow {
-            background: linear-gradient(90deg, #3b82f6, #a855f7, #06b6d4, #3b82f6);
-            background-size: 200% 200%;
-            animation: gradient-flow 4s ease infinite;
-        }
-
-        /* Review Panels 3D Hover & Color Drift */
+        /* Review Panels */
         .review-panel {
             perspective: 1200px;
+            contain: layout style;
         }
 
         .review-card-inner {
@@ -143,10 +118,11 @@
             border-radius: 42px;
             transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
             transform-style: preserve-3d;
+            will-change: transform, box-shadow;
         }
 
         .review-panel:hover .review-card-inner {
-            transform: translateY(-12px) rotateX(3deg) rotateY(-1deg);
+            transform: translateY(-12px) rotateX(3deg) rotateY(-1deg) translateZ(0);
             box-shadow: 0 40px 80px -15px rgba(59, 130, 246, 0.12);
             border-color: rgba(59, 130, 246, 0.4);
             background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(240,245,255,0.6) 100%);
@@ -159,6 +135,7 @@
             z-index: -1;
             background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f9faff 100%);
             overflow: hidden;
+            pointer-events: none;
         }
 
         #neural-canvas {
@@ -166,6 +143,7 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             opacity: 0.85;
+            pointer-events: none;
         }
 
         .blob {
@@ -173,7 +151,8 @@
             filter: blur(120px);
             border-radius: 50%;
             opacity: 0.45;
-            transition: transform 0.3s ease-out;
+            will-change: transform;
+            pointer-events: none;
             z-index: -1;
         }
 
@@ -183,15 +162,11 @@
             gap: 1.5rem;
         }
 
-        .overlap-img {
-            filter: drop-shadow(0 25px 50px rgba(0,0,0,0.12));
-            transform: perspective(1200px) rotateY(-3deg);
-        }
-
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
         }
 
         .reveal.active {
@@ -199,29 +174,35 @@
             transform: translateY(0);
         }
 
-        /* Animated Graphs */
+        section {
+            contain: paint;
+        }
+
+        /* GRAPH ANIMATIONS (RESTORED) */
         @keyframes chaos-jitter {
-            0% { transform: translate(0, 0); }
-            33% { transform: translate(-1.5px, 1px); }
-            66% { transform: translate(1.5px, -1px); }
-            100% { transform: translate(0, 0); }
+            0% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(-3px, 2px, 0); }
+            50% { transform: translate3d(3px, -1.5px, 0); }
+            75% { transform: translate3d(-2px, -3px, 0); }
+            100% { transform: translate3d(0, 0, 0); }
         }
 
         @keyframes vector-flow {
-            from { stroke-dashoffset: 40; }
+            from { stroke-dashoffset: 60; }
             to { stroke-dashoffset: 0; }
         }
 
         .reveal.active .animate-chaos-live {
-            animation: chaos-jitter 0.5s infinite linear;
+            animation: chaos-jitter 0.4s infinite linear;
+            will-change: transform;
         }
 
         .reveal.active .animate-vector-flow {
-            stroke-dasharray: 20, 10;
-            animation: vector-flow 2.5s linear infinite;
+            stroke-dasharray: 30, 15;
+            animation: vector-flow 2s linear infinite;
         }
 
-        /* Vulnerability Diagnostic Animation */
+        /* Diagnostic scan animations */
         @keyframes vulnerability-scan {
             0%, 100% { transform: scaleY(1); opacity: 0.5; filter: hue-rotate(0deg); }
             50% { transform: scaleY(1.4); opacity: 1; filter: hue-rotate(15deg); }
@@ -232,23 +213,25 @@
             animation: vulnerability-scan 2s ease-in-out infinite;
         }
 
-        /* Hero Progress Bars */
-        @keyframes fill-progress {
-            from { width: 0%; }
-            to { width: var(--target-width); }
+        @keyframes line-roll {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
-        .progress-bar-inner {
-            width: 0;
-            animation: fill-progress 2.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-        }
-
-        details[open] summary ~ * {
-            animation: sweep .5s ease-in-out;
+        .animate-line-roll {
+            background: linear-gradient(90deg, #3b82f6 0%, #3b82f6 40%, #ffffff 50%, #3b82f6 60%, #3b82f6 100%);
+            background-size: 300% 100%;
+            animation: line-roll 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        @keyframes sweep {
-            0%    {opacity: 0; margin-top: -10px}
-            100%  {opacity: 1; margin-top: 0px}
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-flow {
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #06b6d4, #3b82f6);
+            background-size: 200% 200%;
+            animation: gradient-flow 4s ease infinite;
         }
 
         .holographic-text {
@@ -256,7 +239,7 @@
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 5s linear infinite;
+            animation: shine 3s linear infinite;
         }
 
         @keyframes shine {
@@ -309,13 +292,10 @@
                 
                 <div class="lg:col-span-5 relative mt-20 lg:mt-0 mb-20 lg:mb-0">
                     <div class="relative z-10 overlap-img">
-                        <!-- Expert photo -->
                         <img src="img/expert-alexey.jpg" alt="Алексей" class="rounded-[56px] w-full h-[450px] lg:h-[700px] object-cover shadow-3xl grayscale hover:grayscale-0 transition duration-1000">
                         
-                        <!-- REFINED EXPERT CARD FOR MOBILE ADAPTATION -->
                         <div class="absolute left-6 right-6 -bottom-16 lg:left-auto lg:-left-6 lg:bottom-8 lg:right-auto expert-card-sharp glass-card p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] w-auto lg:w-72 border border-white shadow-2xl animate-bounce-slow">
                             <div class="flex flex-col gap-3 lg:gap-4">
-                                <!-- Expert Tag -->
                                 <div class="flex justify-between items-center">
                                     <div class="px-3 py-1 bg-brand-black rounded-full expert-status-badge shadow-lg">
                                         <span class="text-[8px] font-black uppercase text-white tracking-[0.2em]">Об эксперте</span>
@@ -325,7 +305,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Personal Identity -->
                                 <div class="flex items-center gap-3 lg:gap-4">
                                     <div class="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xl rotate-3">
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="lg:w-[22px] lg:h-[22px]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -336,7 +315,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Key Metrics -->
                                 <div class="grid grid-cols-2 gap-4 border-t border-black/5 pt-3 lg:pt-4">
                                     <div class="space-y-0.5">
                                         <div class="text-[8px] font-black opacity-40 uppercase tracking-widest">Практика</div>
@@ -348,7 +326,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Insight Line with Shifting Gradient Animation -->
                                 <div class="space-y-2">
                                     <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden relative">
                                         <div class="h-full w-full absolute top-0 left-0 animate-gradient-flow" style="width: 100%;"></div>
@@ -388,8 +365,9 @@
                     </div>
                 </div>
 
+                <!-- Animated Graphs (RESTORED) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch reveal">
-                    <div class="p-12 rounded-[56px] glass-card border border-red-100 flex flex-col justify-between">
+                    <div class="p-12 rounded-[56px] glass-card border border-red-100 flex flex-col justify-between overflow-hidden">
                         <div>
                             <h4 class="text-2xl font-bold mb-4">Без карты: Хаос</h4>
                             <p class="text-gray-500 text-sm mb-8 leading-relaxed italic">Бесконечные попытки и ошибки без четкого понимания своих сильных сторон.</p>
@@ -460,9 +438,9 @@
                         </div>
                         <div class="mt-12 flex items-end gap-3 h-20">
                             <div class="w-3 bg-blue-100 rounded-full diagnostic-bar" style="height: 100%; animation-delay: 0s;"></div>
-                            <div class="w-3 bg-blue-200 rounded-full diagnostic-bar" style="height: 140%; animation-delay: 0.2s;"></div>
-                            <div class="w-3 bg-blue-50 rounded-full diagnostic-bar" style="height: 80%; animation-delay: 0.4s;"></div>
-                            <div class="w-3 bg-blue-100 rounded-full diagnostic-bar" style="height: 110%; animation-delay: 0.6s;"></div>
+                            <div class="w-3 bg-blue-200 rounded-full diagnostic-bar" style="height: 140%; animation-delay: 0.1s;"></div>
+                            <div class="w-3 bg-blue-50 rounded-full diagnostic-bar" style="height: 80%; animation-delay: 0.2s;"></div>
+                            <div class="w-3 bg-blue-100 rounded-full diagnostic-bar" style="height: 110%; animation-delay: 0.3s;"></div>
                         </div>
                     </div>
 
@@ -503,7 +481,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="review-panel reveal" style="transition-delay: 0.2s">
+                    <div class="review-panel reveal" style="transition-delay: 0.1s">
                         <div class="review-card-inner p-10 h-full flex flex-col justify-between">
                             <div>
                                 <div class="w-10 h-10 bg-purple-600/10 rounded-full flex items-center justify-center mb-8 text-purple-600 mx-auto">
@@ -517,7 +495,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="review-panel reveal" style="transition-delay: 0.4s">
+                    <div class="review-panel reveal" style="transition-delay: 0.2s">
                         <div class="review-card-inner p-10 h-full flex flex-col justify-between">
                             <div>
                                 <div class="w-10 h-10 bg-cyan-600/10 rounded-full flex items-center justify-center mb-8 text-cyan-600 mx-auto">
@@ -557,7 +535,7 @@
                                     <p class="text-gray-500 text-lg">Видео и аудио разборы тех, кто уже получил свою карту и вышел из тумана.</p>
                                 </div>
                             </div>
-                            <div class="flex gap-8 reveal">
+                            <div class="flex gap-8 reveal" style="transition-delay: 0.1s">
                                 <div class="text-purple-600 font-black text-4xl">02</div>
                                 <div>
                                     <h4 class="font-bold text-2xl mb-3 uppercase">Прозрачность</h4>
@@ -642,27 +620,29 @@
     <script>
         const CONFIG = {
             colors: ['#3B82F6', '#A855F7', '#06B6D4', '#6366F1'],
-            animationThreshold: 0.1
+            animationThreshold: 0.05
         };
 
         const canvas = document.getElementById('neural-canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: true });
         let particles = [];
         let mousePos = { x: -3000, y: -3000 };
+        let currentMousePos = { x: -3000, y: -3000 };
         let hue = 0;
 
         function initNeural() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particles = [];
-            const particleCount = Math.floor((canvas.width * canvas.height) / 9000);
+            const countFactor = window.innerWidth < 768 ? 15000 : 9000;
+            const particleCount = Math.floor((canvas.width * canvas.height) / countFactor);
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.8,
-                    size: Math.random() * 2.5 + 1.5,
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    size: Math.random() * 2 + 1,
                     color: CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)]
                 });
             }
@@ -670,66 +650,94 @@
 
         function drawNeural() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            hue += 0.3;
+            hue += 0.2;
 
-            particles.forEach((p, i) => {
+            currentMousePos.x += (mousePos.x - currentMousePos.x) * 0.1;
+            currentMousePos.y += (mousePos.y - currentMousePos.y) * 0.1;
+
+            const maxDist = window.innerWidth < 768 ? 250 : 400;
+
+            particles.forEach((p) => {
                 p.x += p.vx; p.y += p.vy;
                 if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
                 ctx.fillStyle = p.color;
-                ctx.globalAlpha = 0.5;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = 0.4;
+                ctx.beginPath(); 
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); 
+                ctx.fill();
 
-                const distMouse = Math.sqrt(Math.pow(p.x - mousePos.x, 2) + Math.pow(p.y - mousePos.y, 2));
-                if (distMouse < 400) {
-                    const gradient = ctx.createLinearGradient(p.x, p.y, mousePos.x, mousePos.y);
+                const dx = p.x - currentMousePos.x;
+                const dy = p.y - currentMousePos.y;
+                const distSq = dx*dx + dy*dy;
+
+                if (distSq < maxDist * maxDist) {
+                    const dist = Math.sqrt(distSq);
+                    const gradient = ctx.createLinearGradient(p.x, p.y, currentMousePos.x, currentMousePos.y);
                     gradient.addColorStop(0, p.color);
-                    gradient.addColorStop(1, `hsla(${hue}, 80%, 60%, 0.5)`);
+                    gradient.addColorStop(1, `hsla(${hue}, 70%, 60%, 0.3)`);
                     
                     ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 2 * (1 - distMouse / 400); 
-                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mousePos.x, mousePos.y); ctx.stroke();
+                    ctx.lineWidth = 1.5 * (1 - dist / maxDist); 
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(currentMousePos.x, currentMousePos.y); ctx.stroke();
                 }
             });
             requestAnimationFrame(drawNeural);
         }
 
         function updateInputPosition(e) {
-            let clientX, clientY;
-            if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX; clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX; clientY = e.clientY;
-            }
-            mousePos.x = clientX; mousePos.y = clientY;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            mousePos.x = clientX; 
+            mousePos.y = clientY;
             
-            document.querySelectorAll('.blob').forEach(blob => {
-                const speed = blob.getAttribute('data-speed');
-                blob.style.transform = `translate(${(clientX / window.innerWidth - 0.5) * speed * 120}px, ${(clientY / window.innerHeight - 0.5) * speed * 120}px)`;
+            const moveX = (clientX / window.innerWidth - 0.5) * 120;
+            const moveY = (clientY / window.innerHeight - 0.5) * 120;
+            
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.blob').forEach(blob => {
+                    const speed = blob.getAttribute('data-speed');
+                    blob.style.transform = `translate3d(${moveX * speed}px, ${moveY * speed}px, 0)`;
+                });
             });
         }
 
+        let lastKnownScrollPosition = 0;
+        let ticking = false;
+        const heroTitle = document.getElementById('hero-title');
+
+        window.addEventListener('scroll', function() {
+            lastKnownScrollPosition = window.scrollY;
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    if(lastKnownScrollPosition < 1200) {
+                        const scale = 1 + lastKnownScrollPosition * 0.0001;
+                        const transY = lastKnownScrollPosition * 0.25;
+                        const opacity = Math.max(0, 1 - lastKnownScrollPosition * 0.0018);
+                        heroTitle.style.transform = `scale3d(${scale}, ${scale}, 1) translate3d(0, ${transY}px, 0)`;
+                        heroTitle.style.opacity = opacity;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
         window.addEventListener('mousemove', updateInputPosition);
         window.addEventListener('touchmove', updateInputPosition, { passive: true });
-        window.addEventListener('touchstart', updateInputPosition, { passive: true });
-        window.addEventListener('touchend', () => { mousePos.x = -3000; mousePos.y = -3000; });
         window.addEventListener('resize', initNeural);
+        window.addEventListener('touchend', () => { mousePos.x = -3000; mousePos.y = -3000; });
 
         initNeural();
         drawNeural();
 
-        const heroTitle = document.getElementById('hero-title');
-        window.addEventListener('scroll', () => {
-            const scroll = window.scrollY;
-            if(scroll < 1200) {
-                heroTitle.style.transform = `scale(${1 + scroll * 0.0001}) translateY(${scroll * 0.25}px)`;
-                heroTitle.style.opacity = Math.max(0, 1 - scroll * 0.0018);
-            }
-        });
-
         const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
         }, { threshold: CONFIG.animationThreshold });
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
