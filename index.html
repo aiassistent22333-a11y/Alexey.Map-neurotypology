@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALEXEY.MAP — Карта твоего персонажа 2026</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            white: '#FFFFFF',
+                            black: '#0A0A0A',
+                            accent: '#3B82F6',
+                            glass: 'rgba(255, 255, 255, 0.15)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.05)',
+                        'inner-glass': 'inset 0 0 20px rgba(255, 255, 255, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .kinetic-title {
+            letter-spacing: -0.06em;
+            transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67), color 0.5s ease;
+        }
+
+        /* Advanced Iridescent Glass 4.0 */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(245,248,255,0.45) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.8s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Special Sharp version for Expert Card to remove "blurry" feel */
+        .expert-card-sharp {
+            background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(250,252,255,0.85) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Iridescent Border Animation */
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            background: linear-gradient(120deg, transparent 30%, rgba(59, 130, 246, 0.2), rgba(168, 85, 247, 0.2), rgba(6, 182, 212, 0.2), transparent 70%);
+            background-size: 200% 200%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: flow-border 8s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Oil Slick Sheen Overlay */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(59, 130, 246, 0.06), rgba(168, 85, 247, 0.06), rgba(6, 182, 212, 0.06), transparent);
+            animation: rotate-hologram 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes flow-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes rotate-hologram {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Expert Badge Shine */
+        @keyframes shine-badge {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .expert-status-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        .expert-status-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine-badge 3s infinite;
+        }
+
+        /* Shifting gradient for the insight line */
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-flow {
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #06b6d4, #3b82f6);
+            background-size: 200% 200%;
+            animation: gradient-flow 4s ease infinite;
+        }
+
+        /* Review Panels 3D Hover & Color Drift */
+        .review-panel {
+            perspective: 1200px;
+        }
+
+        .review-card-inner {
+            background: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(248,250,255,0.5) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 42px;
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+
+        .review-panel:hover .review-card-inner {
+            transform: translateY(-12px) rotateX(3deg) rotateY(-1deg);
+            box-shadow: 0 40px 80px -15px rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(240,245,255,0.6) 100%);
+        }
+
+        .mesh-gradient-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #f9faff 100%);
+            overflow: hidden;
+        }
+
+        #neural-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.85;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(120px);
+            border-radius: 50%;
+            opacity: 0.45;
+            transition: transform 0.3s ease-out;
+            z-index: -1;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .overlap-img {
+            filter: drop-shadow(0 25px 50px rgba(0,0,0,0.12));
+            transform: perspective(1200px) rotateY(-3deg);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animated Graphs */
+        @keyframes chaos-jitter {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(-1.5px, 1px); }
+            66% { transform: translate(1.5px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes vector-flow {
+            from { stroke-dashoffset: 40; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        .reveal.active .animate-chaos-live {
+            animation: chaos-jitter 0.5s infinite linear;
+        }
+
+        .reveal.active .animate-vector-flow {
+            stroke-dasharray: 20, 10;
+            animation: vector-flow 2.5s linear infinite;
+        }
+
+        /* Vulnerability Diagnostic Animation */
+        @keyframes vulnerability-scan {
+            0%, 100% { transform: scaleY(1); opacity: 0.5; filter: hue-rotate(0deg); }
+            50% { transform: scaleY(1.4); opacity: 1; filter: hue-rotate(15deg); }
+        }
+
+        .diagnostic-bar {
+            transform-origin: bottom;
+            animation: vulnerability-scan 2s ease-in-out infinite;
+        }
+
+        /* Hero Progress Bars */
+        @keyframes fill-progress {
+            from { width: 0%; }
+            to { width: var(--target-width); }
+        }
+        .progress-bar-inner {
+            width: 0;
+            animation: fill-progress 2.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        details[open] summary ~ * {
+            animation: sweep .5s ease-in-out;
+        }
+
+        @keyframes sweep {
+            0%    {opacity: 0; margin-top: -10px}
+            100%  {opacity: 1; margin-top: 0px}
+        }
+
+        .holographic-text {
+            background: linear-gradient(90deg, #3b82f6, #a855f7, #06b6d4, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+    </style>
+</head>
+<body class="bg-brand-white text-brand-black antialiased overflow-x-hidden">
+
+    <div class="mesh-gradient-bg">
+        <canvas id="neural-canvas"></canvas>
+        <div class="blob w-[600px] h-[600px] bg-blue-50 top-[-10%] left-[-10%]" data-speed="1.2"></div>
+        <div class="blob w-[700px] h-[700px] bg-purple-50 bottom-[5%] right-[-10%]" data-speed="0.9"></div>
+        <div class="blob w-80 h-80 bg-cyan-50 top-[20%] right-[15%]" data-speed="2.2"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference text-white">
+        <div class="text-xl font-heading font-black tracking-tighter uppercase">ALEXEY.MAP</div>
+        <div class="hidden md:flex gap-8 font-sans text-xs uppercase tracking-[0.3em] font-bold opacity-70">
+            <a href="#problem" class="hover:opacity-100 transition">Проблема</a>
+            <a href="#strategy" class="hover:opacity-100 transition">Решение</a>
+            <a href="#reviews" class="hover:opacity-100 transition">Отзывы</a>
+            <a href="#trust" class="hover:opacity-100 transition">Доверие</a>
+        </div>
+        <a href="https://t.me/baiikall" target="_blank" class="px-6 py-2 bg-white text-black rounded-full text-xs font-bold transition hover:scale-105 active:scale-95 shadow-xl">Записаться</a>
+    </nav>
+
+    <main class="relative z-10">
+        
+        <!-- 1. Hero Block -->
+        <section class="min-h-screen flex items-center px-6 lg:px-24 pt-24 pb-12">
+            <div class="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div class="lg:col-span-7 z-20">
+                    <h1 class="font-heading text-5xl md:text-[72px] leading-[0.95] kinetic-title mb-10 opacity-0 translate-y-10 uppercase font-black" id="hero-title">
+                        Перестань играть в чужую игру. <br><span class="holographic-text">Живи по своим правилам.</span>
+                    </h1>
+                    <p class="font-sans text-xl md:text-2xl text-gray-500 max-w-xl mb-12 leading-relaxed reveal">
+                        Хватит жечь энергию на действия, которые не приносят результата. Пройди глубокую распаковку личности, которая сэкономит тебе годы поисков себя.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-5 reveal">
+                        <button onclick="document.getElementById('cta').scrollIntoView({behavior: 'smooth'})" class="px-12 py-6 bg-brand-black text-white rounded-[24px] font-bold text-lg hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                            Записаться на разбор персонажа
+                        </button>
+                        <div class="flex items-center gap-4 px-8 py-6 glass-card rounded-[24px]">
+                            <div class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></div>
+                            <span class="text-xs font-bold uppercase tracking-widest opacity-60">System Ready</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-5 relative hidden lg:block">
+                    <div class="relative z-10 overlap-img">
+                        <!-- Expert photo -->
+                        <img src="img/expert-alexey.jpg" alt="Алексей" class="rounded-[56px] w-full h-[700px] object-cover shadow-3xl grayscale hover:grayscale-0 transition duration-1000">
+                        
+                        <!-- SMALLER HUMAN-CENTRIC INSIGHT CARD (RUSSIAN) -->
+                        <div class="absolute -left-6 bottom-8 expert-card-sharp glass-card p-6 rounded-[32px] w-72 border border-white shadow-2xl animate-bounce-slow">
+                            <div class="flex flex-col gap-4">
+                                <div class="flex justify-between items-center">
+                                    <div class="px-3 py-1 bg-brand-black rounded-full expert-status-badge shadow-lg">
+                                        <span class="text-[8px] font-black uppercase text-white tracking-[0.2em]">Об эксперте</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xl rotate-3">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                    </div>
+                                    <div class="space-y-0.5">
+                                        <div class="font-heading font-black text-md text-brand-black leading-none uppercase tracking-tight">Алексей</div>
+                                        <div class="text-[9px] font-bold opacity-60 uppercase tracking-[0.1em]">Identity Architect</div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4 border-t border-black/5 pt-4">
+                                    <div class="space-y-1">
+                                        <div class="text-[8px] font-black opacity-40 uppercase tracking-widest">Практика</div>
+                                        <div class="text-md font-black text-brand-black tracking-tight">1000+ ч.</div>
+                                    </div>
+                                    <div class="space-y-1 text-right">
+                                        <div class="text-[8px] font-black opacity-40 uppercase tracking-widest">Кейсы</div>
+                                        <div class="text-xl font-black holographic-text tracking-tighter">30+</div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden relative">
+                                        <div class="h-full w-full absolute top-0 left-0 animate-gradient-flow" style="width: 100%;"></div>
+                                    </div>
+                                    <div class="flex justify-between items-center text-[7px] font-bold opacity-50 uppercase tracking-widest">
+                                        <span class="text-brand-black">Глубокая распаковка</span>
+                                        <span class="text-blue-600">Ясность 100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Problem Block -->
+        <section id="problem" class="py-32 px-6 lg:px-24 bg-gray-50/30">
+            <div class="container mx-auto">
+                <div class="max-w-4xl mb-24">
+                    <h2 class="font-heading text-4xl md:text-7xl mb-8 tracking-tighter reveal uppercase font-black leading-none text-brand-black">Почему твой «персонаж» <br>застрял на одном уровне?</h2>
+                    <p class="text-xl text-gray-500 reveal">Ты — игрок с огромным потенциалом, у которого просто нет карты местности. Ты действуешь наугад, совершая ошибки, которых можно избежать.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    <div class="p-10 rounded-[48px] glass-card reveal">
+                        <h3 class="text-xl font-bold mb-4 holographic-text">Расфокус</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Ты полон энергии, но не знаешь, куда её направить. Энергия сливается впустую.</p>
+                    </div>
+                    <div class="p-10 rounded-[48px] glass-card reveal">
+                        <h3 class="text-xl font-bold mb-4 holographic-text">Сомнения</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">Ты постоянно пробуешь новое, но боишься, что всё это — не твоё.</p>
+                    </div>
+                    <div class="p-10 rounded-[48px] bg-brand-black text-white reveal shadow-2xl">
+                        <h3 class="text-xl font-bold mb-4 text-blue-400">Потеря времени</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">Ты пытаешься разобраться в себе сам, пока жизнь проходит мимо.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch reveal">
+                    <div class="p-12 rounded-[56px] glass-card border border-red-100 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-2xl font-bold mb-4">Без карты: Хаос</h4>
+                            <p class="text-gray-500 text-sm mb-8 leading-relaxed italic">Бесконечные попытки и ошибки без четкого понимания своих сильных сторон.</p>
+                        </div>
+                        <div class="h-48 w-full bg-red-50/30 rounded-3xl relative overflow-hidden">
+                            <svg class="w-full h-full p-6 animate-chaos-live" viewBox="0 0 400 150">
+                                <path d="M0,75 Q20,10 50,130 T100,50 T150,140 T200,30 T250,110 T300,60 T400,90" fill="none" stroke="#ef4444" stroke-width="4" class="opacity-50"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-12 rounded-[56px] bg-brand-black text-white shadow-2xl relative overflow-hidden flex flex-col justify-between">
+                        <div class="relative z-10">
+                            <h4 class="text-2xl font-bold mb-4">С картой: Вектор</h4>
+                            <p class="text-gray-400 text-sm mb-8 leading-relaxed italic">Прямой путь к целям, основанный на твоей уникальной распаковке.</p>
+                        </div>
+                        <div class="h-48 w-full bg-white/5 rounded-3xl relative overflow-hidden flex items-center justify-center">
+                            <svg class="w-full h-full p-6" viewBox="0 0 400 150">
+                                <path d="M0,130 L100,100 L200,60 L400,10" fill="none" stroke="#3b82f6" stroke-width="5" class="animate-vector-flow"></path>
+                                <circle cx="400" cy="10" r="6" fill="#3b82f6" class="animate-pulse"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Solution Block -->
+        <section id="strategy" class="py-32 px-6 lg:px-24">
+            <div class="container mx-auto">
+                <div class="text-center mb-24">
+                    <h2 class="font-heading text-4xl md:text-7xl mb-8 tracking-tighter reveal uppercase font-black leading-none text-brand-black">Твоя «Карта персонажа» — <br>это твоя личная инструкция.</h2>
+                    <p class="text-xl text-gray-500 max-w-2xl mx-auto reveal">Это глубокая работа, которая дает полную ясность в твоих действиях и целях.</p>
+                </div>
+                
+                <div class="bento-grid">
+                    <div class="col-span-12 lg:col-span-8 p-12 glass-card rounded-[56px] shadow-3xl reveal group min-h-[450px] flex flex-col justify-between">
+                        <div class="flex flex-col md:flex-row justify-between items-start gap-12">
+                            <div class="max-w-md">
+                                <h3 class="text-4xl font-bold mb-6">Твои сильные стороны</h3>
+                                <p class="text-gray-500 text-lg leading-relaxed italic">За счет чего именно ты будешь расти быстрее остальных в 2026 году.</p>
+                            </div>
+                            <div class="w-full md:w-56 aspect-square bg-gray-50 rounded-[48px] flex items-center justify-center border-2 border-dashed border-gray-100 group-hover:border-blue-300 transition-colors shadow-inner-glass overflow-hidden relative">
+                                <div class="absolute w-32 h-32 bg-blue-400/20 blur-3xl animate-pulse"></div>
+                                <svg width="180" height="180" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#holographic-grad)" stroke-width="0.5" stroke-dasharray="10 20" class="animate-[spin_10s_linear_infinite]" />
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="url(#holographic-grad)" stroke-width="1" stroke-dasharray="80 30" class="animate-[spin_15s_linear_infinite_reverse]" opacity="0.6" />
+                                    <circle cx="50" cy="50" r="15" fill="url(#holographic-grad)" class="animate-pulse">
+                                        <animate attributeName="r" values="12;16;12" dur="3s" repeatCount="indefinite" />
+                                    </circle>
+                                    <circle cx="50" cy="50" r="4" fill="white" class="animate-ping" />
+                                    <defs>
+                                        <linearGradient id="holographic-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#3b82f6" />
+                                            <stop offset="50%" stop-color="#a855f7" />
+                                            <stop offset="100%" stop-color="#06b6d4" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-12 lg:col-span-4 p-12 bg-white border border-gray-100 rounded-[56px] shadow-3xl reveal hover:scale-[1.02] transition-transform flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6">Твои уязвимости</h3>
+                            <p class="text-gray-500 leading-relaxed text-sm">Что именно тянет тебя вниз и как это нейтрализовать без потери запала.</p>
+                        </div>
+                        <div class="mt-12 flex items-end gap-3 h-20">
+                            <div class="w-3 bg-blue-100 rounded-full diagnostic-bar" style="height: 100%; animation-delay: 0s;"></div>
+                            <div class="w-3 bg-blue-200 rounded-full diagnostic-bar" style="height: 140%; animation-delay: 0.2s;"></div>
+                            <div class="w-3 bg-blue-50 rounded-full diagnostic-bar" style="height: 80%; animation-delay: 0.4s;"></div>
+                            <div class="w-3 bg-blue-100 rounded-full diagnostic-bar" style="height: 110%; animation-delay: 0.6s;"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-12 p-16 bg-brand-black text-white rounded-[56px] shadow-3xl reveal relative overflow-hidden">
+                        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                            <div>
+                                <h3 class="text-4xl font-bold mb-6">Ключевые действия</h3>
+                                <p class="text-gray-400 text-lg leading-relaxed">Только те шаги, которые приведут тебя к результату без лишнего шума и выгорания.</p>
+                            </div>
+                            <div class="flex justify-center md:justify-end">
+                                <button onclick="window.open('https://t.me/baiikall', '_blank')" class="px-14 py-7 bg-blue-600 rounded-full font-bold text-xl hover:bg-blue-500 transition shadow-2xl">Посмотреть этапы квеста</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modern Reviews Block -->
+        <section id="reviews" class="py-32 px-6 lg:px-24">
+            <div class="container mx-auto">
+                <div class="text-center mb-24">
+                    <h2 class="font-heading text-4xl md:text-7xl mb-8 tracking-tighter reveal uppercase font-black leading-none text-brand-black">Они уже получили <br>свою карту</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                    <div class="review-panel reveal">
+                        <div class="review-card-inner p-10 h-full flex flex-col justify-between">
+                            <div>
+                                <div class="w-10 h-10 bg-blue-600/10 rounded-full flex items-center justify-center mb-8 text-blue-600 mx-auto">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V11.5M3.01693 21L3.01693 18C3.01693 16.8954 3.91236 16 5.01693 16H8.01693C8.56921 16 9.01693 15.5523 9.01693 15V9C9.01693 8.44772 8.56921 8 8.01693 8H5.01693C4.46464 8 4.01693 8.44772 4.01693 9V11.5"/></svg>
+                                </div>
+                                <p class="text-gray-600 italic text-sm leading-relaxed mb-8 text-center">«После того, как Я провзаимодействовал с Алексеем жизнь по другому играет. Я теперь могу работать и получать результат, не перегорать в моменте. Я научился хорошо восстанавливаться...»</p>
+                            </div>
+                            <div class="pt-8 border-t border-black/5 text-center">
+                                <div class="font-bold text-blue-600">Даниил</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-panel reveal" style="transition-delay: 0.2s">
+                        <div class="review-card-inner p-10 h-full flex flex-col justify-between">
+                            <div>
+                                <div class="w-10 h-10 bg-purple-600/10 rounded-full flex items-center justify-center mb-8 text-purple-600 mx-auto">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V11.5M3.01693 21L3.01693 18C3.01693 16.8954 3.91236 16 5.01693 16H8.01693C8.56921 16 9.01693 15.5523 9.01693 15V9C9.01693 8.44772 8.56921 8 8.01693 8H5.01693C4.46464 8 4.01693 8.44772 4.01693 9V11.5"/></svg>
+                                </div>
+                                <p class="text-gray-600 italic text-sm leading-relaxed mb-8 text-center">«После взаимодействия с тобой интересные вещи про себя ронял, что Я больше хороший исполнитель. Но когда ты подсветил, что Я могу докрутить и улучшить любой процесс — взгляд на себя стал совсем другой...»</p>
+                            </div>
+                            <div class="pt-8 border-t border-black/5 text-center">
+                                <div class="font-bold text-purple-600">Никита</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-panel reveal" style="transition-delay: 0.4s">
+                        <div class="review-card-inner p-10 h-full flex flex-col justify-between">
+                            <div>
+                                <div class="w-10 h-10 bg-cyan-600/10 rounded-full flex items-center justify-center mb-8 text-cyan-600 mx-auto">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V11.5M3.01693 21L3.01693 18C3.01693 16.8954 3.91236 16 5.01693 16H8.01693C8.56921 16 9.01693 15.5523 9.01693 15V9C9.01693 8.44772 8.56921 8 8.01693 8H5.01693C4.46464 8 4.01693 8.44772 4.01693 9V11.5"/></svg>
+                                </div>
+                                <p class="text-gray-600 italic text-sm leading-relaxed mb-8 text-center">«До работы были сомнения и неуверенность в своих действиях. Во время работы разобрали болячки, зажали курс действий. Исправили что не хватало, и жизнь стала такой, которую я заслуживаю...»</p>
+                            </div>
+                            <div class="pt-8 border-t border-black/5 text-center">
+                                <div class="font-bold text-cyan-600">Роман</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center reveal">
+                    <button onclick="window.open('https://t.me/otsyv_neurotypology', '_blank')" class="group relative px-12 py-5 border border-blue-500/30 text-blue-600 rounded-full font-bold overflow-hidden transition-all transform hover:scale-105 active:scale-95 shadow-xl inline-flex items-center justify-center min-w-[280px]">
+                        <span class="relative z-10">Посмотреть все отзывы</span>
+                        <div class="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                        <span class="absolute inset-0 flex items-center justify-center text-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">Смотреть все</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Trust & Proof -->
+        <section id="trust" class="py-32 px-6 lg:px-24">
+            <div class="container mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+                    <div class="lg:col-span-6">
+                        <h2 class="font-heading text-4xl md:text-6xl mb-12 tracking-tighter reveal uppercase font-black leading-none text-brand-black">1000+ часов практики и результаты.</h2>
+                        <div class="space-y-10">
+                            <div class="flex gap-8 reveal">
+                                <div class="text-blue-600 font-black text-4xl">01</div>
+                                <div>
+                                    <h4 class="font-bold text-2xl mb-3 uppercase">30+ реальных отзывов</h4>
+                                    <p class="text-gray-500 text-lg">Видео и аудио разборы тех, кто уже получил свою карту и вышел из тумана.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-8 reveal">
+                                <div class="text-purple-600 font-black text-4xl">02</div>
+                                <div>
+                                    <h4 class="font-bold text-2xl mb-3 uppercase">Прозрачность</h4>
+                                    <p class="text-gray-500 text-lg">Ты можешь написать любому из моих клиентов и лично спросить об их результатах.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-6">
+                        <div class="p-16 glass-card rounded-[64px] border-2 border-blue-500/10 shadow-3xl reveal relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="text-3xl font-black mb-8 uppercase tracking-tighter holographic-text">100% Гарантия</h3>
+                                <p class="text-gray-600 text-xl leading-relaxed mb-10">Если после нашей работы твой запрос не будет решен — я верну всю сумму полностью. Без лишних вопросов. Инвестиция защищена репутацией.</p>
+                                <div class="flex items-center gap-5 text-blue-600 font-black text-lg uppercase">
+                                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
+                                    <span>Risk Reversal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. FAQ Block -->
+        <section id="faq" class="py-32 px-6 lg:px-24 bg-gray-50/20">
+            <div class="container mx-auto max-w-5xl">
+                <h2 class="font-heading text-4xl md:text-[80px] mb-20 tracking-tighter reveal text-center uppercase font-black leading-none text-brand-black">Прямые ответы:</h2>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <details class="group reveal glass-card rounded-[40px] p-10 cursor-pointer transition-all hover:shadow-xl">
+                        <summary class="flex justify-between items-center list-none">
+                            <span class="text-2xl md:text-3xl font-bold tracking-tight">«Это не магия?»</span>
+                            <span class="text-4xl group-open:rotate-45 transition-transform text-blue-600">+</span>
+                        </summary>
+                        <p class="mt-8 text-gray-500 leading-relaxed text-xl border-t border-black/5 pt-8">Нет, это структурный анализ твоей личности и опыта. Никакого гадания. Чистая технология.</p>
+                    </details>
+                    <details class="group reveal glass-card rounded-[40px] p-10 cursor-pointer transition-all hover:shadow-xl">
+                        <summary class="flex justify-between items-center list-none">
+                            <span class="text-2xl md:text-3xl font-bold tracking-tight">«Это не инфоцыганство?»</span>
+                            <span class="text-4xl group-open:rotate-45 transition-transform text-blue-600">+</span>
+                        </summary>
+                        <p class="mt-8 text-gray-500 leading-relaxed text-xl border-t border-black/5 pt-8">Я несу полную ответственность за результат. Это подтверждают кейсы и условия моей работы с возвратом средств.</p>
+                    </details>
+                    <details class="group reveal glass-card rounded-[40px] p-10 cursor-pointer transition-all hover:shadow-xl">
+                        <summary class="flex justify-between items-center list-none">
+                            <span class="text-2xl md:text-3xl font-bold tracking-tight">«Я справлюсь сам?»</span>
+                            <span class="text-4xl group-open:rotate-45 transition-transform text-blue-600">+</span>
+                        </summary>
+                        <p class="mt-8 text-gray-500 leading-relaxed text-xl border-t border-black/5 pt-8">Возможно. Но сколько лет ты готов потратить на ошибки, которые можно исключить всего за одну неделю?</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Final CTA -->
+        <section id="cta" class="py-48 px-6 lg:px-24 relative overflow-hidden bg-brand-black text-white rounded-t-[100px] mt-20">
+            <div class="container mx-auto text-center relative z-10">
+                <h2 class="font-heading text-5xl md:text-[120px] mb-12 tracking-tighter reveal uppercase font-black leading-[0.8]">Готов увидеть <br>свою карту?</h2>
+                <p class="text-xl md:text-3xl text-gray-400 mb-20 max-w-4xl mx-auto reveal font-light leading-relaxed">Инвестиция обсуждается после вводной сессии. Я беру в работу не всех — только тех, кто готов действовать.</p>
+                
+                <div class="flex flex-col items-center gap-10 reveal">
+                    <button onclick="window.open('https://t.me/baiikall', '_blank')" class="group relative px-20 py-9 bg-blue-600 text-white rounded-full font-black text-3xl overflow-hidden shadow-2xl transition hover:scale-105 active:scale-95">
+                        <span class="relative z-10 tracking-tight uppercase">Получить карту в Telegram</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </button>
+                    <div class="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.4em] opacity-40">
+                        <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
+                        <span>Selection Protocol Active</span>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-blue-600/10 rounded-full blur-[180px] -z-10"></div>
+        </section>
+
+    </main>
+
+    <footer class="py-20 px-6 lg:px-24 bg-brand-black text-white/20 text-[11px] tracking-[0.5em] font-black uppercase text-center border-t border-white/5">
+        ALEXEY.MAP — CHARACTER ENGINEERING — CSS DESIGN AWARDS 2026 — DIGITAL ARCHITECTURE
+    </footer>
+
+    <script>
+        const CONFIG = {
+            colors: ['#3B82F6', '#A855F7', '#06B6D4', '#6366F1'],
+            animationThreshold: 0.1
+        };
+
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mousePos = { x: -3000, y: -3000 };
+        let hue = 0;
+
+        function initNeural() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const particleCount = Math.floor((canvas.width * canvas.height) / 9000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
+                    size: Math.random() * 2.5 + 1.5,
+                    color: CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)]
+                });
+            }
+        }
+
+        function drawNeural() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hue += 0.3;
+
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.5;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+
+                const distMouse = Math.sqrt(Math.pow(p.x - mousePos.x, 2) + Math.pow(p.y - mousePos.y, 2));
+                if (distMouse < 400) {
+                    const gradient = ctx.createLinearGradient(p.x, p.y, mousePos.x, mousePos.y);
+                    gradient.addColorStop(0, p.color);
+                    gradient.addColorStop(1, `hsla(${hue}, 80%, 60%, 0.5)`);
+                    
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 2 * (1 - distMouse / 400); 
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mousePos.x, mousePos.y); ctx.stroke();
+                }
+            });
+            requestAnimationFrame(drawNeural);
+        }
+
+        function updateInputPosition(e) {
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX; clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX; clientY = e.clientY;
+            }
+            mousePos.x = clientX; mousePos.y = clientY;
+            
+            document.querySelectorAll('.blob').forEach(blob => {
+                const speed = blob.getAttribute('data-speed');
+                blob.style.transform = `translate(${(clientX / window.innerWidth - 0.5) * speed * 120}px, ${(clientY / window.innerHeight - 0.5) * speed * 120}px)`;
+            });
+        }
+
+        window.addEventListener('mousemove', updateInputPosition);
+        window.addEventListener('touchmove', updateInputPosition, { passive: true });
+        window.addEventListener('touchstart', updateInputPosition, { passive: true });
+        window.addEventListener('touchend', () => { mousePos.x = -3000; mousePos.y = -3000; });
+        window.addEventListener('resize', initNeural);
+
+        initNeural();
+        drawNeural();
+
+        const heroTitle = document.getElementById('hero-title');
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            if(scroll < 1200) {
+                heroTitle.style.transform = `scale(${1 + scroll * 0.0001}) translateY(${scroll * 0.25}px)`;
+                heroTitle.style.opacity = Math.max(0, 1 - scroll * 0.0018);
+            }
+        });
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: CONFIG.animationThreshold });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        window.onload = () => {
+            setTimeout(() => {
+                heroTitle.classList.remove('opacity-0', 'translate-y-10');
+                heroTitle.classList.add('opacity-100', 'translate-y-0');
+            }, 500);
+        };
+    </script>
+</body>
+</html>
