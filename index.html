@@ -239,7 +239,7 @@
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s linear infinite;
+            animation: shine 5s linear infinite;
         }
 
         @keyframes shine {
@@ -285,18 +285,18 @@
                         </button>
                         <div class="flex items-center justify-center gap-4 px-8 py-6 glass-card rounded-[24px]">
                             <div class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></div>
-                            <span class="text-xs font-bold uppercase tracking-widest opacity-60">System Ready</span>
+                            <span class="text-xs font-bold uppercase tracking-widest opacity-60">Система готова</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="lg:col-span-5 relative mt-12 lg:mt-0 mb-16 lg:mb-0">
+                <div class="lg:col-span-5 relative mt-12 lg:mt-0 mb-20 lg:mb-0">
                     <div class="relative z-10 overlap-img">
                         <!-- Expert photo -->
                         <img src="img/expert-alexey.jpg" alt="Алексей" class="rounded-[56px] w-full h-[450px] lg:h-[700px] object-cover shadow-3xl grayscale hover:grayscale-0 transition duration-1000">
                         
-                        <!-- REFINED EXPERT CARD FOR MOBILE ADAPTATION -->
-                        <div class="absolute left-6 right-6 -bottom-12 lg:left-auto lg:-left-6 lg:bottom-8 lg:right-auto expert-card-sharp glass-card p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] w-auto lg:w-72 border border-white shadow-2xl animate-bounce-slow">
+                        <!-- REFINED EXPERT CARD POSITIONING -->
+                        <div class="absolute left-8 right-8 bottom-8 lg:left-auto lg:-left-12 lg:bottom-12 lg:right-auto expert-card-sharp glass-card p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] w-auto lg:w-72 border border-white shadow-2xl animate-bounce-slow">
                             <div class="flex flex-col gap-3 lg:gap-4">
                                 <!-- Expert Tag -->
                                 <div class="flex justify-between items-center">
@@ -315,7 +315,7 @@
                                     </div>
                                     <div class="space-y-0">
                                         <div class="font-heading font-black text-sm lg:text-md text-brand-black leading-none uppercase tracking-tight">Алексей</div>
-                                        <div class="text-[8px] lg:text-[9px] font-bold opacity-60 uppercase tracking-[0.1em]">Identity Architect</div>
+                                        <div class="text-[8px] lg:text-[9px] font-bold opacity-60 uppercase tracking-[0.1em]">Архитектор личности</div>
                                     </div>
                                 </div>
 
@@ -371,6 +371,7 @@
                     </div>
                 </div>
 
+                <!-- Animated Graphs (RESTORED) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch reveal">
                     <div class="p-12 rounded-[56px] glass-card border border-red-100 flex flex-col justify-between overflow-hidden">
                         <div>
@@ -414,6 +415,7 @@
                                 <h3 class="text-4xl font-bold mb-6">Твои сильные стороны</h3>
                                 <p class="text-gray-500 text-lg leading-relaxed italic">За счет чего именно ты будешь расти быстрее остальных в 2026 году.</p>
                             </div>
+                            <!-- CORE ANIMATION -->
                             <div class="w-full md:w-56 aspect-square bg-gray-50 rounded-[48px] flex items-center justify-center border-2 border-dashed border-gray-100 group-hover:border-blue-300 transition-colors shadow-inner-glass overflow-hidden relative">
                                 <div class="absolute w-32 h-32 bg-blue-400/20 blur-3xl animate-pulse"></div>
                                 <svg width="180" height="180" viewBox="0 0 100 100">
@@ -455,7 +457,8 @@
                                 <p class="text-gray-400 text-lg leading-relaxed">Только те шаги, которые приведут тебя к результату без лишнего шума и выгорания.</p>
                             </div>
                             <div class="flex justify-center md:justify-end">
-                                <button onclick="window.open('https://t.me/baiikall', '_blank')" class="px-14 py-7 bg-blue-600 rounded-full font-bold text-xl hover:bg-blue-500 transition shadow-2xl">Посмотреть этапы квеста</button>
+                                <!-- Changed to <a> for reliability on macOS/iOS -->
+                                <a href="https://t.me/baiikall" target="_blank" class="px-14 py-7 bg-blue-600 rounded-full font-bold text-xl hover:bg-blue-500 transition shadow-2xl inline-block text-center">Посмотреть этапы квеста</a>
                             </div>
                         </div>
                     </div>
@@ -481,7 +484,7 @@
                             </div>
                             <div class="pt-8 border-t border-black/5 text-center">
                                 <div class="font-bold text-blue-600">Даниил</div>
-                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Опыт клиента</div>
                             </div>
                         </div>
                     </div>
@@ -495,7 +498,7 @@
                             </div>
                             <div class="pt-8 border-t border-black/5 text-center">
                                 <div class="font-bold text-purple-600">Никита</div>
-                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Опыт клиента</div>
                             </div>
                         </div>
                     </div>
@@ -509,18 +512,19 @@
                             </div>
                             <div class="pt-8 border-t border-black/5 text-center">
                                 <div class="font-bold text-cyan-600">Роман</div>
-                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Client Experience</div>
+                                <div class="text-[10px] uppercase font-black tracking-widest opacity-40">Опыт клиента</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="text-center reveal">
-                    <button onclick="window.open('https://t.me/otsyv_neurotypology', '_blank')" class="group relative px-12 py-5 border border-blue-500/30 text-blue-600 rounded-full font-bold overflow-hidden transition-all transform hover:scale-105 active:scale-95 shadow-xl inline-flex items-center justify-center min-w-[280px]">
+                    <!-- Changed to <a> for reliability on macOS/iOS -->
+                    <a href="https://t.me/otsyv_neurotypology" target="_blank" class="group relative px-12 py-5 border border-blue-500/30 text-blue-600 rounded-full font-bold overflow-hidden transition-all transform hover:scale-105 active:scale-95 shadow-xl inline-flex items-center justify-center min-w-[280px]">
                         <span class="relative z-10">Посмотреть все отзывы</span>
                         <div class="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                         <span class="absolute inset-0 flex items-center justify-center text-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">Смотреть все</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -555,7 +559,7 @@
                                 <p class="text-gray-600 text-xl leading-relaxed mb-10">Если после нашей работы твой запрос не будет решен — я верну всю сумму полностью. Без лишних вопросов. Инвестиция защищена репутацией.</p>
                                 <div class="flex items-center gap-5 text-blue-600 font-black text-lg uppercase">
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
-                                    <span>Risk Reversal</span>
+                                    <span>Гарантия возврата</span>
                                 </div>
                             </div>
                         </div>
@@ -602,13 +606,14 @@
                 <p class="text-xl md:text-3xl text-gray-400 mb-16 lg:mb-20 max-w-4xl mx-auto reveal font-light leading-relaxed">Инвестиция обсуждается после вводной сессии. Я беру в работу не всех — только тех, кто готов действовать.</p>
                 
                 <div class="flex flex-col items-center gap-10 reveal">
-                    <button onclick="window.open('https://t.me/baiikall', '_blank')" class="group relative px-10 lg:px-20 py-7 lg:py-9 bg-blue-600 text-white rounded-full font-black text-xl lg:text-3xl overflow-hidden shadow-2xl transition hover:scale-105 active:scale-95">
+                    <!-- Changed to <a> for reliability on macOS/iOS -->
+                    <a href="https://t.me/baiikall" target="_blank" class="group relative px-10 lg:px-20 py-7 lg:py-9 bg-blue-600 text-white rounded-full font-black text-xl lg:text-3xl overflow-hidden shadow-2xl transition hover:scale-105 active:scale-95 inline-block text-center">
                         <span class="relative z-10 tracking-tight uppercase">Получить карту в Telegram</span>
                         <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </button>
+                    </a>
                     <div class="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.4em] opacity-40">
                         <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
-                        <span>Selection Protocol Active</span>
+                        <span>Протокол отбора активен</span>
                     </div>
                 </div>
             </div>
@@ -618,7 +623,7 @@
     </main>
 
     <footer class="py-12 lg:py-20 px-6 lg:px-24 bg-brand-black text-white/20 text-[11px] tracking-[0.5em] font-black uppercase text-center border-t border-white/5">
-        ALEXEY.MAP — CHARACTER ENGINEERING — CSS DESIGN AWARDS 2026 — DIGITAL ARCHITECTURE
+        ALEXEY.MAP — ИНЖЕНЕРИЯ ПЕРСОНАЖА — ДИЗАЙН ПРЕМИЯ 2026 — ЦИФРОВАЯ АРХИТЕКТУРА
     </footer>
 
     <script>
