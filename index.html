@@ -264,7 +264,7 @@
             <a href="#reviews" class="hover:opacity-100 transition">Отзывы</a>
             <a href="#trust" class="hover:opacity-100 transition">Доверие</a>
         </div>
-        <a href="https://t.me/baiikall" target="_blank" class="px-6 py-2 bg-white text-black rounded-full text-xs font-bold transition hover:scale-105 active:scale-95 shadow-xl">Записаться</a>
+        <a href="https://t.me/baiikall" target="_blank" rel="noopener noreferrer" class="px-6 py-2 bg-white text-black rounded-full text-xs font-bold transition hover:scale-105 active:scale-95 shadow-xl">Записаться</a>
     </nav>
 
     <main class="relative z-10">
@@ -280,9 +280,10 @@
                         Хватит жечь энергию на действия, которые не приносят результата. Пройди глубокую распаковку личности, которая сэкономит тебе годы поисков себя.
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-5 reveal">
-                        <button onclick="document.getElementById('cta').scrollIntoView({behavior: 'smooth'})" class="px-12 py-6 bg-brand-black text-white rounded-[24px] font-bold text-lg hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                        <!-- Hero Button: Anchor link for 100% compatibility -->
+                        <a href="#cta" class="px-12 py-6 bg-brand-black text-white rounded-[24px] font-bold text-lg hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-block text-center">
                             Записаться на разбор персонажа
-                        </button>
+                        </a>
                         <div class="flex items-center justify-center gap-4 px-8 py-6 glass-card rounded-[24px]">
                             <div class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></div>
                             <span class="text-xs font-bold uppercase tracking-widest opacity-60">Система готова</span>
@@ -290,13 +291,13 @@
                     </div>
                 </div>
                 
-                <div class="lg:col-span-5 relative mt-12 lg:mt-0 mb-20 lg:mb-0">
+                <div class="lg:col-span-5 relative mt-12 lg:mt-0 mb-24 lg:mb-0">
                     <div class="relative z-10 overlap-img">
                         <!-- Expert photo -->
                         <img src="img/expert-alexey.jpg" alt="Алексей" class="rounded-[56px] w-full h-[450px] lg:h-[700px] object-cover shadow-3xl grayscale hover:grayscale-0 transition duration-1000">
                         
-                        <!-- REFINED EXPERT CARD POSITIONING -->
-                        <div class="absolute left-8 right-8 bottom-8 lg:left-auto lg:-left-12 lg:bottom-12 lg:right-auto expert-card-sharp glass-card p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] w-auto lg:w-72 border border-white shadow-2xl animate-bounce-slow">
+                        <!-- EXPERT CARD - DETACHED FOR BETTER VISUALS ON ALL DEVICES -->
+                        <div class="absolute left-10 right-10 -bottom-28 lg:left-auto lg:-left-24 lg:bottom-16 lg:right-auto expert-card-sharp glass-card p-5 lg:p-6 rounded-[28px] lg:rounded-[32px] w-auto lg:w-72 border border-white shadow-2xl animate-bounce-slow">
                             <div class="flex flex-col gap-3 lg:gap-4">
                                 <!-- Expert Tag -->
                                 <div class="flex justify-between items-center">
@@ -371,7 +372,7 @@
                     </div>
                 </div>
 
-                <!-- Animated Graphs (RESTORED) -->
+                <!-- Animated Graphs -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch reveal">
                     <div class="p-12 rounded-[56px] glass-card border border-red-100 flex flex-col justify-between overflow-hidden">
                         <div>
@@ -457,8 +458,8 @@
                                 <p class="text-gray-400 text-lg leading-relaxed">Только те шаги, которые приведут тебя к результату без лишнего шума и выгорания.</p>
                             </div>
                             <div class="flex justify-center md:justify-end">
-                                <!-- Changed to <a> for reliability on macOS/iOS -->
-                                <a href="https://t.me/baiikall" target="_blank" class="px-14 py-7 bg-blue-600 rounded-full font-bold text-xl hover:bg-blue-500 transition shadow-2xl inline-block text-center">Посмотреть этапы квеста</a>
+                                <!-- Robust direct link with rel tags -->
+                                <a href="https://t.me/baiikall" target="_blank" rel="noopener noreferrer" class="px-14 py-7 bg-blue-600 rounded-full font-bold text-xl hover:bg-blue-500 transition shadow-2xl inline-block text-center">Посмотреть этапы квеста</a>
                             </div>
                         </div>
                     </div>
@@ -519,8 +520,8 @@
                 </div>
 
                 <div class="text-center reveal">
-                    <!-- Changed to <a> for reliability on macOS/iOS -->
-                    <a href="https://t.me/otsyv_neurotypology" target="_blank" class="group relative px-12 py-5 border border-blue-500/30 text-blue-600 rounded-full font-bold overflow-hidden transition-all transform hover:scale-105 active:scale-95 shadow-xl inline-flex items-center justify-center min-w-[280px]">
+                    <!-- Robust direct link with rel tags -->
+                    <a href="https://t.me/otsyv_neurotypology" target="_blank" rel="noopener noreferrer" class="group relative px-12 py-5 border border-blue-500/30 text-blue-600 rounded-full font-bold overflow-hidden transition-all transform hover:scale-105 active:scale-95 shadow-xl inline-flex items-center justify-center min-w-[280px]">
                         <span class="relative z-10">Посмотреть все отзывы</span>
                         <div class="absolute inset-0 bg-blue-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                         <span class="absolute inset-0 flex items-center justify-center text-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">Смотреть все</span>
@@ -606,8 +607,8 @@
                 <p class="text-xl md:text-3xl text-gray-400 mb-16 lg:mb-20 max-w-4xl mx-auto reveal font-light leading-relaxed">Инвестиция обсуждается после вводной сессии. Я беру в работу не всех — только тех, кто готов действовать.</p>
                 
                 <div class="flex flex-col items-center gap-10 reveal">
-                    <!-- Changed to <a> for reliability on macOS/iOS -->
-                    <a href="https://t.me/baiikall" target="_blank" class="group relative px-10 lg:px-20 py-7 lg:py-9 bg-blue-600 text-white rounded-full font-black text-xl lg:text-3xl overflow-hidden shadow-2xl transition hover:scale-105 active:scale-95 inline-block text-center">
+                    <!-- Robust direct link with rel tags -->
+                    <a href="https://t.me/baiikall" target="_blank" rel="noopener noreferrer" class="group relative px-10 lg:px-20 py-7 lg:py-9 bg-blue-600 text-white rounded-full font-black text-xl lg:text-3xl overflow-hidden shadow-2xl transition hover:scale-105 active:scale-95 inline-block text-center">
                         <span class="relative z-10 tracking-tight uppercase">Получить карту в Telegram</span>
                         <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </a>
